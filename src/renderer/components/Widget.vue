@@ -43,11 +43,21 @@ export default {
   }
   .yellow:hover {
     color: #ffffff;
+    height: 18px;
+    width: 18px;
+    border-radius: 9px;
+    font-size: 20px;
+    transition: all 0.2s linear;
   }
   .red {
     background-color: #FF6666;
   }
   .red:hover {
     color: #ffffff;
+    height: 18px;
+    width: 18px;
+    border-radius: 9px;
+    font-size: 20px;
+    transition: all 0.2s linear;
   }
 </style>

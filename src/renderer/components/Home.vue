@@ -1,48 +1,48 @@
 <template>
   <div class="home">
+    <loading v-if="albums.length===0"></loading>
     <section class="albums">
-      <article class="album" @click="detail">
-        <img src="~@/assets/album.jpg" alt="" class="album-img">
+      <article class="album" v-for="album in albums" :key="album.aid" @click="detail(album.aid)">
+        <img v-lazy="album.album_img" alt="" class="album-img">
         <div class="album-desc">
-          <h3 class="name">李云龙语音包</h3>
-          <p class="desc">描述内容。。。</p>
+          <h3 class="name">{{album.name}}</h3>
+          <p class="desc">{{album.desc}}</p>
         </div>
       </article>
-      <article class="album">
-        <img src="~@/assets/album.jpg" alt="" class="album-img">
-        <div class="album-desc">
-          <h3 class="name">李云龙语音包</h3>
-          <p class="desc">描述内容。。。</p>
-        </div>
-      </article>
-      <article class="album">
-        <img src="~@/assets/album.jpg" alt="" class="album-img">
-        <div class="album-desc">
-          <h3 class="name">李云龙语音包</h3>
-          <p class="desc">描述内容。。。</p>
-        </div>
-      </article>
-      <article class="album">
-        <img src="~@/assets/album.jpg" alt="" class="album-img">
-        <div class="album-desc">
-          <h3 class="name">李云龙语音包李云龙语音包</h3>
-          <p class="desc">描述内容。。。</p>
-        </div>
-      </article>
-    </section>
-    <section>
-      <router-view></router-view>
     </section>
   </div>
 </template>
 
 <script>
+import Loading from './Loading'
 export default {
+  data () {
+    return {
+      albums: []
+    }
+  },
+  components: {
+    Loading
+  },
+  mounted () {
+    this._fetchData()
+  },
   methods: {
-    detail () {
-      console.log(123)
+    _fetchData () {
+      let apiUrl = 'https://www.easy-mock.com/mock/5ad86a17c1196e47fdb233f7/chicken/albums'
+      this.$http.get(apiUrl).then(res => {
+        if (res.status === 200 && res.statusText === 'OK') {
+          this.albums = res.data.data.list
+        }
+      })
+    },
+    detail (aid) {
+      console.log(aid)
       this.$router.push({
-        name: 'song'
+        name: 'album',
+        query: {
+          aid: aid
+        }
       })
     }
   }
@@ -72,6 +72,9 @@ export default {
     height: 64px;
     margin: 0 20px;
   }
+  .album-desc {
+    margin-right: 16px;
+  }
   .name {
     font-size: 16px;
     width: 100%;
@@ -81,7 +84,7 @@ export default {
     text-overflow: ellipsis;
   }
   .desc {
-    font-size: 14px;
+    font-size: 12px;
   }
   .album:nth-child(odd) {
     background-color: #ffffff;
@@ -91,7 +94,13 @@ export default {
   }
   .album:hover {
     background-color: #efefef;
-    transition: background-color .5s ease;
+    transition: background-color .4s ease;
     cursor: pointer;
+  }
+  .slide-enter-active, .slide-leave-active {
+    transition: opacity 5s;
+  }
+  .slide-enter, .slide-leave-to {
+    opacity: 0;
   }
 </style>

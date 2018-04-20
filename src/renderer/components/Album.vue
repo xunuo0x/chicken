@@ -1,67 +1,47 @@
 <template>
   <div class="index">
-    <section class="album">
+    <loading v-if="!album"></loading>
+    <section class="album" v-if="album">
       <img class="album-img" src="~@/assets/album.jpg" alt="">
       <article class="album-desc">
-        <h2>李云龙语音包</h2>
-        <p>秀芹大妹子···</p>
+        <h2>{{album.name}}</h2>
+        <p>{{album.desc}}</p>
       </article>
       <span class="back-icon" @click="back">BACK</span>
     </section>
-    <section class="list">
+    <section class="list" v-if="album">
       <ul class="songs">
-        <li class="song" v-for="(song,index) in songs" :key="index"><span class="index-span" v-if="idx !== index+1">{{index+1}}</span><span v-if="idx === index+1" class="img-span"><img src="~@/assets/music_on.png" alt="" class="music-on"></span><span class="name">{{song.name}}</span></li>
+        <li class="song" v-for="(song,index) in album.list" :key="index"><span class="index-span" v-if="idx !== index+1">{{index+1}}</span><span v-if="idx === index+1" class="img-span"><img src="~@/assets/music_on.png" alt="" class="music-on"></span><span class="name">{{song.name}}</span></li>
       </ul>
     </section>
   </div>
 </template>
 
 <script>
+import Loading from './Loading'
 export default {
+  components: {
+    Loading
+  },
+  mounted () {
+    this._fetchAlbum(this.$route.query.aid)
+  },
   data () {
     return {
-      songs: [
-        {
-          name: '秀芹大妹子1'
-        },
-        {
-          name: '秀芹大妹子23333'
-        },
-        {
-          name: '秀芹大妹子3'
-        },
-        {
-          name: '秀芹大妹子4'
-        },
-        {
-          name: '秀芹大妹子1'
-        },
-        {
-          name: '秀芹大妹子23333'
-        },
-        {
-          name: '秀芹大妹子3'
-        },
-        {
-          name: '秀芹大妹子4'
-        },
-        {
-          name: '秀芹大妹子1'
-        },
-        {
-          name: '秀芹大妹子23333'
-        },
-        {
-          name: '秀芹大妹子3'
-        },
-        {
-          name: '秀芹大妹子4'
-        }
-      ],
-      idx: 2
+      idx: 2,
+      album: null
     }
   },
   methods: {
+    _fetchAlbum (aid) {
+      console.log(aid)
+      const apiUrl = `https://www.easy-mock.com/mock/5ad86a17c1196e47fdb233f7/chicken/album/${aid}`
+      this.$http.get(apiUrl).then(res => {
+        if (res.status === 200 && res.statusText === 'OK') {
+          this.album = res.data.data
+        }
+      })
+    },
     back () {
       this.$router.back()
     }
@@ -100,7 +80,6 @@ export default {
    margin-left: 20px;
  }
  .album-img:hover {
-   /* box-shadow: 5px 5px 5px #efefef; */
    filter: blur(1px);
  }
  .back-icon {
@@ -118,16 +97,16 @@ export default {
  }
 
  .album-desc {
-   margin-left: 20px;
+   margin: 0 16px;
    flex-basis: 180px;
  }
  .album-desc h2 {
    font-weight: 500;
-   font-size: 20px;
+   font-size: 16px;
  }
  .album-desc p {
    margin-top: 10px;
-   font-size: 14px;
+   font-size: 12px;
  }
  .songs {
    padding-top: 80px;
@@ -147,7 +126,7 @@ export default {
    background-color: #ffffff;
  }
  li.song:hover {
-   transition: background-color .5s ease;
+   transition: background-color .4s ease;
    background-color: #efefef;
  }
  .name {

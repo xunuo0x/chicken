@@ -17,11 +17,11 @@ export default {
       routes: [
         {
           path: 'home',
-          img: 'music'
+          img: 'index'
         },
         {
           path: 'wechat',
-          img: 'wechat_white'
+          img: 'person_white'
         },
         {
           path: 'info',

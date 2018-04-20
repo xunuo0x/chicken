@@ -8,22 +8,34 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: require('@/components/Home').default
+      component: require('@/components/Home').default,
+      meta: {
+        keepAlive: true
+      }
     },
     {
-      path: '/song',
-      name: 'song',
-      component: require('@/components/Song').default
+      path: '/album',
+      name: 'album',
+      component: require('@/components/Album').default,
+      meta: {
+        keepAlive: false
+      }
     },
     {
       path: '/wechat',
       name: 'wechat',
-      component: require('@/components/Wechat').default
+      component: require('@/components/Wechat').default,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/info',
       name: 'info',
-      component: require('@/components/Info').default
+      component: require('@/components/Info').default,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/landing',
